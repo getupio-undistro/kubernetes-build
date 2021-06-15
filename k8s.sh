@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 KUBERNETES_VERSION=$1
-docker system prune -fa
 rm -rf kubernetes
 git clone https://github.com/kubernetes/kubernetes.git
 cd kubernetes
