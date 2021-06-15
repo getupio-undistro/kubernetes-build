@@ -12,5 +12,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          install: true
+
       - name: Run kubernetes Build
         run: ./k8s.sh v1.21.1
