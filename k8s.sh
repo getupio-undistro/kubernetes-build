@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 KUBERNETES_VERSION=$1
+export DOCKER_BUILDKIT=1
 rm -rf kubernetes
 git clone https://github.com/kubernetes/kubernetes.git
 cd kubernetes
