@@ -18,5 +18,12 @@ jobs:
         with:
           install: true
 
+      - name: docker login
+        env:
+          DOCKER_LOGIN: ${{ secrets.DOCKER_LOGIN }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          echo $DOCKER_PASSWORD | docker login -u $DOCKER_LOGIN --password-stdin
+
       - name: Run kubernetes Build
         run: ./k8s.sh v1.21.1
