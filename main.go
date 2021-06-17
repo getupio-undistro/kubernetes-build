@@ -21,9 +21,9 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strconv"
 	"strings"
 
-	"github.com/Masterminds/semver/v3"
 	"github.com/sirupsen/logrus"
 	"k8s.io/apimachinery/pkg/util/yaml"
 )
@@ -48,12 +48,22 @@ type project struct {
 	PackageBinariesCommand cmd    `json:"packageBinariesCommand,omitempty"`
 }
 
-func parseVersion(v string) (*semver.Version, error) {
-	vLessV := strings.TrimPrefix(v, "v")
-	if _, err := semver.StrictNewVersion(vLessV); err != nil {
-		return nil, err
+func isNumeric(s string) bool {
+	_, err := strconv.ParseFloat(s, 64)
+	return err == nil
+}
+
+func parseVersion(v string) error {
+	err := fmt.Errorf("invalid version: %v", v)
+	v = strings.TrimPrefix(v, "v")
+	split := strings.Split(v, ".")
+	if len(split) != 2 {
+		return err
 	}
-	return semver.NewVersion(v)
+	if !isNumeric(split[0]) || !isNumeric(split[1]) {
+		return err
+	}
+	return nil
 }
 
 func main() {
@@ -68,7 +78,10 @@ func main() {
 		if !info.IsDir() {
 			return nil
 		}
-		_, err = parseVersion(info.Name())
+		if strings.Contains(path, ".git") {
+			return nil
+		}
+		err = parseVersion(info.Name())
 		if err != nil {
 			logrus.Warnf("ignoring %s is not semver", info.Name())
 			return nil
