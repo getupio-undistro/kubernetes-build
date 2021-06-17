@@ -1,7 +1,7 @@
 projects:
   - name: kubernetes
     repo: https://github.com/kubernetes/kubernetes.git
-    version: v1.21.1
+    version: v1.21.2
     env:
       - name: VERSION_PRERELEASE
         value: "undistro"

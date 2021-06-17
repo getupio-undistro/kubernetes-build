@@ -112,7 +112,8 @@ func main() {
 			if err != nil {
 				return fmt.Errorf("failed to run git clone: %v", err)
 			}
-			err = os.Chdir(filepath.Join(root, p.Name))
+			workdir := filepath.Join(root, p.Name)
+			err = os.Chdir(workdir)
 			if err != nil {
 				return fmt.Errorf("failed to cd into project: %v", err)
 			}
@@ -179,6 +180,10 @@ func main() {
 				if err != nil {
 					return fmt.Errorf("failed to run packageimages: %v", err)
 				}
+			}
+			err = os.RemoveAll(workdir)
+			if err != nil {
+				return fmt.Errorf("failed to delete project directory: %v", err)
 			}
 			for _, e := range p.Env {
 				err = os.Unsetenv(e.Name)

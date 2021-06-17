@@ -1,8 +1,9 @@
 name: Kubernetes
 
 on:
+  workflow_dispatch:
   push:
-    branches: ["*"]
+    branches: ["main"]
 jobs:
   build:
     runs-on: self-hosted
