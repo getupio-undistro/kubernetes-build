@@ -87,7 +87,7 @@ func main() {
 			return nil
 		}
 		filesystem := os.DirFS(path)
-		f, err := filesystem.Open(filepath.Join(path, "config.yaml"))
+		f, err := filesystem.Open("config.yaml")
 		if err != nil {
 			return fmt.Errorf("failed to open config: %v", err)
 		}
