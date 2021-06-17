@@ -37,6 +37,11 @@ type cmd struct {
 	Args []string `json:"args,omitempty"`
 }
 
+type env struct {
+	Name  string `json:"name,omitempty"`
+	Value string `json:"value,omitempty"`
+}
+
 type project struct {
 	Name                   string `json:"name,omitempty"`
 	Repo                   string `json:"repo,omitempty"`
@@ -46,6 +51,7 @@ type project struct {
 	AfterReleaseCommand    cmd    `json:"afterReleaseCommand,omitempty"`
 	PackageImagesCommand   cmd    `json:"packageImagesCommand,omitempty"`
 	PackageBinariesCommand cmd    `json:"packageBinariesCommand,omitempty"`
+	Env                    []env  `json:"env,omitempty"`
 }
 
 func isNumeric(s string) bool {
@@ -118,6 +124,12 @@ func main() {
 			if err != nil {
 				return fmt.Errorf("failed to run checkout: %v", err)
 			}
+			for _, e := range p.Env {
+				err = os.Setenv(e.Name, e.Value)
+				if err != nil {
+					return fmt.Errorf("failed to setenv: %v", e.Name)
+				}
+			}
 			if p.BeforeReleaseCommand.Name != "" {
 				bcmd := exec.Command(p.BeforeReleaseCommand.Name, p.BeforeReleaseCommand.Args...)
 				bcmd.Stdin = os.Stdin
@@ -166,6 +178,12 @@ func main() {
 				err = bcmd.Run()
 				if err != nil {
 					return fmt.Errorf("failed to run packageimages: %v", err)
+				}
+			}
+			for _, e := range p.Env {
+				err = os.Unsetenv(e.Name)
+				if err != nil {
+					return fmt.Errorf("failed to unsetenv: %v", e.Name)
 				}
 			}
 		}
