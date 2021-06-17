@@ -181,6 +181,10 @@ func main() {
 					return fmt.Errorf("failed to run packageimages: %v", err)
 				}
 			}
+			err = os.Chdir(root)
+			if err != nil {
+				return fmt.Errorf("failed to cd back to root directory: %v", err)
+			}
 			err = os.RemoveAll(workdir)
 			if err != nil {
 				return fmt.Errorf("failed to delete project directory: %v", err)
