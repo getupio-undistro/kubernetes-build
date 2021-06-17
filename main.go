@@ -106,7 +106,7 @@ func main() {
 			if err != nil {
 				return fmt.Errorf("failed to run git clone: %v", err)
 			}
-			err = os.Chdir(filepath.Join(path, p.Name))
+			err = os.Chdir(filepath.Join(root, p.Name))
 			if err != nil {
 				return fmt.Errorf("failed to cd into project: %v", err)
 			}
