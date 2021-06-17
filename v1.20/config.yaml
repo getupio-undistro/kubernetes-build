@@ -1,0 +1,14 @@
+projects:
+  - name: kubernetes
+    repo: https://github.com/kubernetes/kubernetes.git
+    version: v1.20.8
+    env:
+      - name: VERSION_PRERELEASE
+        value: "undistro"
+      - name: KUBE_DOCKER_REGISTRY
+        value: "docker.io/getupioundistro"
+      - name: KUBE_RELEASE_RUN_TESTS
+        value: "n"
+    releaseCommand:
+      name: make
+      args: ["release"]
