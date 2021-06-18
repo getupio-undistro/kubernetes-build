@@ -15,12 +15,22 @@ projects:
   - name: coredns
     repo: https://github.com/coredns/coredns.git
     version: v1.8.4
-    env:
-      - name: DOCKER
-        value: "docker.io/getupioundistro"
     releaseCommand:
       name: make
-      args: ["-f", "Makefile.release", "release"]
+      args:
+        [
+          "DOCKER=docker.io/getupioundistro",
+          "-f",
+          "Makefile.release",
+          "release",
+        ]
     packageImagesCommand:
       name: make
-      args: ["-f", "Makefile.release", "docker-build", "docker-push"]
+      args:
+        [
+          "DOCKER=docker.io/getupioundistro",
+          "-f",
+          "Makefile.release",
+          "docker-build",
+          "docker-push",
+        ]
