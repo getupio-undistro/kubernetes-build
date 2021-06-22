@@ -39,7 +39,7 @@ projects:
     version: v3.5.0
     env:
       - name: TAG
-        value: "docker.io/getupioundistro"
+        value: "docker.io/getupioundistro/etcd"
       - name: VERSION
         value: v3.5.0
     releaseCommand:
