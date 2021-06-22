@@ -46,7 +46,7 @@ projects:
       name: bash
       args: [
           "-c",
-          'for TARGET_ARCH in "amd64" "arm64" "ppc64le" "s390x" ""; do
+          'for TARGET_ARCH in "amd64" "arm64" "ppc64le" "s390x"; do
           GOOS=linux GOARCH=${TARGET_ARCH} ./scripts/build-docker v3.5.0;
           done',
         ]
@@ -54,7 +54,7 @@ projects:
       name: bash
       args: [
           "-c",
-          'for TARGET_ARCH in "-amd64" "-arm64" "-ppc64le" "-s390x" ""; do
+          'for TARGET_ARCH in "-amd64" "-arm64" "-ppc64le" "-s390x"; do
           docker push docker.io/getupioundistro/etcd:v3.5.0${TARGET_ARCH};
           done',
         ]
