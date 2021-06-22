@@ -44,11 +44,12 @@ projects:
         value: v3.5.0
     releaseCommand:
       name: ./scripts/build-release.sh
+      args: [v3.5.0]
     packageImagesCommand:
       name: bash
       args: [
           "-c",
           'for TARGET_ARCH in "amd64" "-arm64" "-ppc64le" "-s390x" ""; do
-          docker push docker.io/getupioundistro:${VERSION}${TARGET_ARCH}
+          docker push docker.io/getupioundistro/etcd:v3.5.0${TARGET_ARCH}
           done',
         ]
