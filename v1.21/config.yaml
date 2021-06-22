@@ -34,3 +34,20 @@ projects:
           "docker-build",
           "docker-push",
         ]
+  - name: etcd
+    repo: https://github.com/etcd-io/etcd.git
+    version: v3.5.0
+    env:
+      name: TAG
+      value: "docker.io/getupioundistro"
+    releaseCommand:
+      name: ./scripts/release.sh
+      args: [v3.5.0]
+    packageImagesCommand:
+      name: bash
+      args: [
+          "-c",
+          'for TARGET_ARCH in "amd64" "-arm64" "-ppc64le" "-s390x" ""; do
+          docker push docker.io/getupioundistro:v3.5.0${TARGET_ARCH}
+          done',
+        ]
