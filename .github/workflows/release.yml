@@ -1,0 +1,39 @@
+name: Kubernetes
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go 1.x
+        uses: actions/setup-go@v2
+        with:
+          go-version: ^1.16
+        id: go
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_LOGIN }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Version vars
+        run: ./hack/version.sh
+
+      - name: Run kubernetes Build
+        env:
+          DOCKER_BUILDKIT: "1"
+          DOCKER_LOGIN: ${{ secrets.DOCKER_LOGIN }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          git config --global url."https://github.com/".insteadOf "git@github.com:"
+          go run main.go -versions=$(echo "${GIT_MAJOR}.${GIT_MINOR}")

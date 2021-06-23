@@ -12,6 +12,27 @@ projects:
     releaseCommand:
       name: make
       args: ["release"]
+    packageImagesCommand:
+      name: bash
+      args:
+        - "-c"
+        - >
+          cd _output/release-images;
+          for ARCH in */ ; do
+            cd ${ARCH};
+            for IMAGE in *.tar ; do
+              docker load < ${IMAGE}
+              IMG=$(ls -1 $image | sed -e 's/\.tar$//')
+              docker push "docker.io/getupioundistro/${IMG}-${ARCH}:v1.21.2"
+              if [${ARCH} -eq amd64] 
+              then
+                docker image tag "docker.io/getupioundistro/${IMG}-${ARCH}:v1.21.2" "docker.io/getupioundistro/${IMG}:v1.21.2"
+                docker push "docker.io/getupioundistro/${IMG}:v1.21.2"
+              fi;
+            done;
+            cd ..;
+          done;
+          cd ../..;
   - name: coredns
     repo: https://github.com/coredns/coredns.git
     version: v1.8.4
