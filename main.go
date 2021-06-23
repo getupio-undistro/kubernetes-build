@@ -16,6 +16,7 @@ limitations under the License.
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io/fs"
 	"os"
@@ -73,6 +74,13 @@ func parseVersion(v string) error {
 }
 
 func main() {
+	var (
+		clean    bool
+		versions string
+	)
+	flag.BoolVar(&clean, "clean", true, "remove files at the end")
+	flag.StringVar(&versions, "versions", "v1.18,v1.19,v1.20,v1.21", "version to build")
+	flag.Parse()
 	root, err := os.Getwd()
 	if err != nil {
 		logrus.Fatal(err)
@@ -90,6 +98,10 @@ func main() {
 		err = parseVersion(info.Name())
 		if err != nil {
 			logrus.Warnf("ignoring %s is not semver", info.Name())
+			return nil
+		}
+		if !strings.Contains(versions, info.Name()) {
+			logrus.Warnf("ignoring %s", info.Name())
 			return nil
 		}
 		filesystem := os.DirFS(path)
@@ -185,14 +197,16 @@ func main() {
 			if err != nil {
 				return fmt.Errorf("failed to cd back to root directory: %v", err)
 			}
-			err = os.RemoveAll(workdir)
-			if err != nil {
-				return fmt.Errorf("failed to delete project directory: %v", err)
-			}
-			for _, e := range p.Env {
-				err = os.Unsetenv(e.Name)
+			if clean {
+				err = os.RemoveAll(workdir)
 				if err != nil {
-					return fmt.Errorf("failed to unsetenv: %v", e.Name)
+					return fmt.Errorf("failed to delete project directory: %v", err)
+				}
+				for _, e := range p.Env {
+					err = os.Unsetenv(e.Name)
+					if err != nil {
+						return fmt.Errorf("failed to unsetenv: %v", e.Name)
+					}
 				}
 			}
 		}

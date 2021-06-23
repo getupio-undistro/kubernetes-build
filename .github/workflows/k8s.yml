@@ -2,8 +2,16 @@ name: Kubernetes
 
 on:
   workflow_dispatch:
-  push:
-    branches: ["main"]
+    inputs:
+      clean:
+        description: "Clean after build project"
+        required: true
+        default: "true"
+      versions:
+        description: "Clean after build project"
+        required: true
+        default: "v1.18,v1.19,v1.20,v1.21"
+
 jobs:
   build:
     runs-on: self-hosted
@@ -32,4 +40,4 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
           git config --global url."https://github.com/".insteadOf "git@github.com:"
-          go run main.go
+          go run main.go -clean ${{ github.event.inputs.clean }} -versions ${{ github.event.inputs.versions }}
