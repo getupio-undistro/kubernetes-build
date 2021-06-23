@@ -81,6 +81,8 @@ func main() {
 	flag.BoolVar(&clean, "clean", true, "remove files at the end")
 	flag.StringVar(&versions, "versions", "v1.18,v1.19,v1.20,v1.21", "version to build")
 	flag.Parse()
+	logrus.Infof("clean: %v\n", clean)
+	logrus.Infof("versions to build: %q\n", versions)
 	root, err := os.Getwd()
 	if err != nil {
 		logrus.Fatal(err)
@@ -95,13 +97,14 @@ func main() {
 		if strings.Contains(path, ".git") {
 			return nil
 		}
+		logrus.Infof("directory: %v\n", info.Name())
 		err = parseVersion(info.Name())
 		if err != nil {
 			logrus.Warnf("ignoring %s is not semver", info.Name())
 			return nil
 		}
 		if !strings.Contains(versions, info.Name()) {
-			logrus.Warnf("ignoring %s", info.Name())
+			logrus.Warnf("ignoring %s is not match versions %s", info.Name(), versions)
 			return nil
 		}
 		filesystem := os.DirFS(path)
