@@ -20,7 +20,7 @@ projects:
         - "-c"
         - >
           cd build/pause;
-          make all-push
+          make all-push;
           cd ../..;
     packageImagesCommand:
       name: bash
