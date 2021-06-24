@@ -7,11 +7,21 @@ projects:
         value: "undistro"
       - name: KUBE_DOCKER_REGISTRY
         value: "docker.io/getupioundistro"
+      - name: REGISTRY
+        value: "docker.io/getupioundistro"
       - name: KUBE_RELEASE_RUN_TESTS
         value: "n"
     releaseCommand:
       name: make
       args: ["release"]
+    afterReleaseCommand:
+      name: bash
+      args:
+        - "-c"
+        - >
+          cd build/pause;
+          make all-push
+          cd ../..;
     packageImagesCommand:
       name: bash
       args:
