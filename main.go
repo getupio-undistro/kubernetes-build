@@ -201,6 +201,14 @@ func main() {
 				return fmt.Errorf("failed to cd back to root directory: %v", err)
 			}
 			if clean {
+				bcmd := exec.Command("docker", "system", "prune", "-fa")
+				bcmd.Stdin = os.Stdin
+				bcmd.Stderr = os.Stderr
+				bcmd.Stdout = os.Stdout
+				err = bcmd.Run()
+				if err != nil {
+					return fmt.Errorf("failed to run docker system prune: %v", err)
+				}
 				err = os.RemoveAll(workdir)
 				if err != nil {
 					return fmt.Errorf("failed to delete project directory: %v", err)
