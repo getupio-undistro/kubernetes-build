@@ -31,6 +31,7 @@ projects:
           for ARCH in */ ; do
             echo "Arch: ${ARCH}";
             cd ${ARCH};
+            ls;
             for IMAGE in *.tar ; do
               echo "Image: ${IMAGE}";
               docker load < ${IMAGE};
