@@ -30,8 +30,6 @@ projects:
           cd _output/release-images;
           for ARCH in */ ; do
             echo "Arch: ${ARCH}";
-            cd ${ARCH};
-            ls;
             for IMAGE in *.tar ; do
               echo "Image: ${IMAGE}";
               docker load < ${IMAGE};
@@ -43,7 +41,6 @@ projects:
                 docker push "docker.io/getupioundistro/${IMG}:v1.20.8";
               fi;
             done;
-            cd ..;
           done;
           cd ../..;
   - name: coredns
