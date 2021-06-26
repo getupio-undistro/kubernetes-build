@@ -28,7 +28,8 @@ projects:
         - "-c"
         - >
           cd _output/release-images;
-          for ARCH in */ ; do
+          for ARCH_FOLDER in */ ; do
+            ARCH=$(echo ${ARCH_FOLDER} | sed 's:/*$::')
             echo "Arch: ${ARCH}";
             cd ${ARCH};
             ls;
