@@ -38,8 +38,7 @@ projects:
               docker load < ${IMAGE};
               IMG=$(ls -1 $image | sed -e 's/\.tar$//');
               docker push "docker.io/getupioundistro/${IMG}-${ARCH}:v1.21.2";
-              if [${ARCH} -eq amd64] 
-              then
+              if [ "${ARCH}" -eq "amd64" ]; then
                 docker image tag "docker.io/getupioundistro/${IMG}-${ARCH}:v1.21.2" "docker.io/getupioundistro/${IMG}:v1.21.2";
                 docker push "docker.io/getupioundistro/${IMG}:v1.21.2";
               fi;
