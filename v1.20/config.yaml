@@ -6,9 +6,9 @@ projects:
       - name: VERSION_PRERELEASE
         value: "undistro"
       - name: KUBE_DOCKER_REGISTRY
-        value: "docker.io/getupioundistro"
+        value: "getupioundistro"
       - name: REGISTRY
-        value: "docker.io/getupioundistro"
+        value: "getupioundistro"
       - name: KUBE_RELEASE_RUN_TESTS
         value: "n"
     releaseCommand:
@@ -37,10 +37,10 @@ projects:
               echo "Image: ${IMAGE}";
               docker load < ${IMAGE};
               IMG=$(ls -1 $image | sed -e 's/\.tar$//');
-              docker push "docker.io/getupioundistro/${IMG}-${ARCH}:v1.20.8";
+              docker push "getupioundistro/${IMG}-${ARCH}:v1.20.8";
               if [ "${ARCH}" -eq "amd64" ]; then
-                docker image tag "docker.io/getupioundistro/${IMG}-${ARCH}:v1.20.8" "docker.io/getupioundistro/${IMG}:v1.20.8";
-                docker push "docker.io/getupioundistro/${IMG}:v1.20.8";
+                docker image tag "getupioundistro/${IMG}-${ARCH}:v1.20.8" "getupioundistro/${IMG}:v1.20.8";
+                docker push "getupioundistro/${IMG}:v1.20.8";
               fi;
             done;
             cd ..;
@@ -51,18 +51,12 @@ projects:
     version: v1.8.4
     releaseCommand:
       name: make
-      args:
-        [
-          "DOCKER=docker.io/getupioundistro",
-          "-f",
-          "Makefile.release",
-          "release",
-        ]
+      args: ["DOCKER=getupioundistro", "-f", "Makefile.release", "release"]
     packageImagesCommand:
       name: make
       args:
         [
-          "DOCKER=docker.io/getupioundistro",
+          "DOCKER=getupioundistro",
           "-f",
           "Makefile.release",
           "docker-build",
@@ -73,7 +67,7 @@ projects:
     version: v3.5.0
     env:
       - name: TAG
-        value: "docker.io/getupioundistro/etcd"
+        value: "getupioundistro/etcd"
       - name: VERSION
         value: v3.5.0
     releaseCommand:
@@ -90,14 +84,14 @@ projects:
         [
           "image",
           "tag",
-          "docker.io/getupioundistro/etcd:v3.5.0-amd64",
-          "docker.io/getupioundistro/etcd:v3.5.0",
+          "getupioundistro/etcd:v3.5.0-amd64",
+          "getupioundistro/etcd:v3.5.0",
         ]
     packageImagesCommand:
       name: bash
       args: [
           "-c",
           'for TARGET_ARCH in "-amd64" "-arm64" "-ppc64le" "-s390x" ""; do
-          docker push docker.io/getupioundistro/etcd:v3.5.0${TARGET_ARCH};
+          docker push getupioundistro/etcd:v3.5.0${TARGET_ARCH};
           done',
         ]
