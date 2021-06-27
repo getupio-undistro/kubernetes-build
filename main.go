@@ -209,13 +209,23 @@ func main() {
 				if err != nil {
 					return fmt.Errorf("failed to run docker system prune: %v", err)
 				}
-				bcmd = exec.Command("docker", "volume", "rm", "$(docker volume ls -q)")
+				bcmd = exec.Command("docker", "volume", "ls", "-q")
 				bcmd.Stdin = os.Stdin
 				bcmd.Stderr = os.Stderr
 				bcmd.Stdout = os.Stdout
-				err = bcmd.Run()
+				out, err := bcmd.CombinedOutput()
 				if err != nil {
-					return fmt.Errorf("failed to run docker volume rm: %v", err)
+					return fmt.Errorf("failed to run docker volume ls: %v", err)
+				}
+				if len(out) > 0 {
+					bcmd = exec.Command("docker", "volume", "rm", "$(docker volume ls -q)")
+					bcmd.Stdin = os.Stdin
+					bcmd.Stderr = os.Stderr
+					bcmd.Stdout = os.Stdout
+					err = bcmd.Run()
+					if err != nil {
+						return fmt.Errorf("failed to run docker volume rm: %v", err)
+					}
 				}
 				err = os.RemoveAll(workdir)
 				if err != nil {
