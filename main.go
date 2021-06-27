@@ -210,9 +210,6 @@ func main() {
 					return fmt.Errorf("failed to run docker system prune: %v", err)
 				}
 				bcmd = exec.Command("docker", "volume", "ls", "-q")
-				bcmd.Stdin = os.Stdin
-				bcmd.Stderr = os.Stderr
-				bcmd.Stdout = os.Stdout
 				out, err := bcmd.CombinedOutput()
 				if err != nil {
 					return fmt.Errorf("failed to run docker volume ls: %v", err)
