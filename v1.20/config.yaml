@@ -29,16 +29,16 @@ projects:
         - >
           cd _output/release-images;
           for ARCH_FOLDER in */ ; do
-            ARCH=$(echo ${ARCH_FOLDER} | sed 's:/*$::')
+            ARCH=$(echo ${ARCH_FOLDER} | sed 's:/*$::');
             echo "Arch: ${ARCH}";
             cd ${ARCH};
             ls;
             for IMAGE in *.tar ; do
               echo "Image: ${IMAGE}";
               docker load < ${IMAGE};
-              IMG=$(ls -1 $image | sed -e 's/\.tar$//');
+              IMG=$(ls -1 ${IMAGE} | sed -e 's/\.tar$//');
               docker push "getupioundistro/${IMG}-${ARCH}:v1.20.8";
-              if [ "${ARCH}" -eq "amd64" ]; then
+              if [[ "${ARCH}" = "amd64" ]]; then
                 docker image tag "getupioundistro/${IMG}-${ARCH}:v1.20.8" "getupioundistro/${IMG}:v1.20.8";
                 docker push "getupioundistro/${IMG}:v1.20.8";
               fi;
