@@ -6,9 +6,9 @@ projects:
       - name: VERSION_PRERELEASE
         value: "undistro"
       - name: KUBE_DOCKER_REGISTRY
-        value: "registry.undistro.io"
+        value: "registry.undistro.io/library"
       - name: REGISTRY
-        value: "registry.undistro.io"
+        value: "registry.undistro.io/library"
       - name: KUBE_RELEASE_RUN_TESTS
         value: "n"
     releaseCommand:
@@ -37,10 +37,10 @@ projects:
               echo "Image: ${IMAGE}";
               docker load < ${IMAGE};
               IMG=$(ls -1 ${IMAGE} | sed -e 's/\.tar$//');
-              docker push "registry.undistro.io/${IMG}-${ARCH}:v1.19.12";
+              docker push "registry.undistro.io/library/${IMG}-${ARCH}:v1.19.12";
               if [ "${ARCH}" = "amd64" ]; then
-                docker image tag "registry.undistro.io/${IMG}-${ARCH}:v1.19.12" "registry.undistro.io/${IMG}:v1.19.12";
-                docker push "registry.undistro.io/${IMG}:v1.19.12";
+                docker image tag "registry.undistro.io/library/${IMG}-${ARCH}:v1.19.12" "registry.undistro.io/library/${IMG}:v1.19.12";
+                docker push "registry.undistro.io/library/${IMG}:v1.19.12";
               fi;
             done;
             cd ..;
@@ -51,12 +51,18 @@ projects:
     version: v1.8.4
     releaseCommand:
       name: make
-      args: ["DOCKER=registry.undistro.io", "-f", "Makefile.release", "release"]
+      args:
+        [
+          "DOCKER=registry.undistro.io/library",
+          "-f",
+          "Makefile.release",
+          "release",
+        ]
     packageImagesCommand:
       name: make
       args:
         [
-          "DOCKER=registry.undistro.io",
+          "DOCKER=registry.undistro.io/library",
           "-f",
           "Makefile.release",
           "docker-build",
@@ -67,7 +73,7 @@ projects:
     version: v3.5.0
     env:
       - name: TAG
-        value: "registry.undistro.io/etcd"
+        value: "registry.undistro.io/library/etcd"
       - name: VERSION
         value: v3.5.0
     releaseCommand:
@@ -84,14 +90,14 @@ projects:
         [
           "image",
           "tag",
-          "registry.undistro.io/etcd:v3.5.0-amd64",
-          "registry.undistro.io/etcd:v3.5.0",
+          "registry.undistro.io/library/etcd:v3.5.0-amd64",
+          "registry.undistro.io/library/etcd:v3.5.0",
         ]
     packageImagesCommand:
       name: bash
       args: [
           "-c",
           'for TARGET_ARCH in "-amd64" "-arm64" "-ppc64le" "-s390x" ""; do
-          docker push registry.undistro.io/etcd:v3.5.0${TARGET_ARCH};
+          docker push registry.undistro.io/library/etcd:v3.5.0${TARGET_ARCH};
           done',
         ]
