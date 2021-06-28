@@ -37,3 +37,4 @@ jobs:
         run: |
           git config --global url."https://github.com/".insteadOf "git@github.com:"
           go run main.go -versions=$(echo "${GIT_MAJOR}.${GIT_MINOR}")
+          ./hack/clean-volumes.sh

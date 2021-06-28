@@ -41,3 +41,4 @@ jobs:
         run: |
           git config --global url."https://github.com/".insteadOf "git@github.com:"
           go run main.go -clean=${{ github.event.inputs.clean }} -versions=${{ github.event.inputs.versions }}
+          ./hack/clean-volumes.sh
