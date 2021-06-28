@@ -215,7 +215,7 @@ func main() {
 					return fmt.Errorf("failed to run docker volume ls: %v", err)
 				}
 				if len(out) > 0 {
-					bcmd = exec.Command("docker", "volume", "rm", "$(docker volume ls -q)")
+					bcmd = exec.Command("./hack/clean-volumes.sh")
 					bcmd.Stdin = os.Stdin
 					bcmd.Stderr = os.Stderr
 					bcmd.Stdout = os.Stdout
