@@ -17,4 +17,5 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-docker volume rm $(docker volume ls -q)
+docker volume rm $(docker volume ls -q);
+exit 0;
